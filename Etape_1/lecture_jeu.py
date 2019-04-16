@@ -26,7 +26,7 @@ if (line.startswith("c [evacuation info]")):
         vl = []
         for j in range(4,4+k):
             vl.append(int(ll[j]))
-        evac_info[id] = {'pop': pop, 'max_rate': max_rate, 'startdate': 0, 'k': k, 'route': vl}
+        evac_info[id] = {'pop': pop, 'max_rate': max_rate, 'start_date': 0, 'k': k, 'route': vl}
     print(evac_info)
 
 line = f.readline()
@@ -44,5 +44,5 @@ if (line.startswith("c [graph]")):
         duedate = int(ll[2])
         length = float(ll[3])
         capacity = int(float(ll[4]))
-        graph[(n1,n2)] = {'duedate': duedate, 'length': length, 'capacity': capacity}
+        graph[(n1,n2)] = {'due_date': duedate, 'length': length, 'capacity': capacity}
     print(graph)
