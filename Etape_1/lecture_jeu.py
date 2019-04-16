@@ -26,7 +26,7 @@ if (line.startswith("c [evacuation info]")):
         vl = []
         for j in range(4,4+k):
             vl.append(int(ll[j]))
-        evac_info[id] = {'pop': pop, 'max_rate': max_rate, 'start_date': 0, 'k': k, 'route': vl}
+        evac_info[id] = {'pop': pop, 'max_rate': max_rate, 'k': k, 'route': vl}
     print(evac_info)
 
 line = f.readline()
