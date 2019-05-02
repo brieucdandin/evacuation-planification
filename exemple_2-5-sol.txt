@@ -1,6 +1,6 @@
 exemple 2.5 solution
 3
-1 8 0
+1 8 3
 2 5 0
 3 3 0
 valid

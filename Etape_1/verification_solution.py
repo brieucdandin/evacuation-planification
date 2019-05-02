@@ -20,20 +20,27 @@ def calculate_objective(evac_nodes,blocs):
 
 def verify_capacities(evac_nodes,arcs,blocs):
     used_arcs = set([tup[1] for tup in blocs if tup[1][1] != 'completed'])
-    print(used_arcs)
+    print("used arcs: ", used_arcs)
+    valid = True
     for a in used_arcs:
         capacity = arcs[a]['capacity']
+        # seq = liste de (start_date,evac_rate,durée_traversée) de chaque bloc se déroulant sur l'arc a
         seq = [(blocs[tup][0],blocs[tup][1],-(-evac_nodes[tup[0]]['pop']//blocs[tup][1])) for tup in blocs if tup[1] == a]
-        start = min(seq)[0]
-        end = max(seq)[0] + arcs[a]['length']
+        start = min(seq)[0] # début du passage sur l'arc a
+        end = max([s+d for (s,r,d) in seq]) # fin du passage sur l'arc a
+        # print("seq: ", seq)
         for t in range(start,end):
             nb_pers = 0
+            # pour chaque bloc de l'arc a, on compte le nombre de personnes qui traversent
             for (st,rate,ft) in seq:
-                if (t>=st and t<=(st+ft)):
+                if (t>=st and t<(st+ft)):
                     nb_pers = nb_pers + rate
-            print(a," time:",t," nb_pers:",nb_pers)
+            # print(a," time:",t," nb_pers:",nb_pers)
+            # si le nombre de personne est supérieur à la capacité de l'arc, la solution n'est pas réalisable
             if (nb_pers>capacity):
-                print(a, "problem")
+                print(a, "problem capacity =", capacity)
+                valid = False
+    return valid
 
 
 if __name__== "__main__":
@@ -46,4 +53,8 @@ if __name__== "__main__":
     gantt_blocs = create_blocs(my_evac,my_graph,my_sol['param'])
     print("representation blocs pour la solution ", gantt_blocs)
     print("theoretical objective = " , my_sol['objective'], " minimum objective = ", calculate_objective(my_evac,gantt_blocs))
-    verify_capacities(my_evac,my_graph,gantt_blocs)
+    realisable = verify_capacities(my_evac,my_graph,gantt_blocs)
+    if realisable:
+        print("solution réalisable")
+    else:
+        print("solution non réalisable")
