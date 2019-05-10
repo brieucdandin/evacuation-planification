@@ -12,6 +12,6 @@ dense_10_30_3_1_I.full-borne_inf
 285 71 0
 invalid
 91
-0.00801992416381836
+0.01142740249633789
 borne inferieure
 test!&0

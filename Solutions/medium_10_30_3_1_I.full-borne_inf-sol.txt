@@ -12,6 +12,6 @@ medium_10_30_3_1_I.full-borne_inf
 221 70 0
 invalid
 106
-0.005490303039550781
+0.0137939453125
 borne inferieure
 test!&0

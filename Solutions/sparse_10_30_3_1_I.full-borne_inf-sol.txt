@@ -12,6 +12,6 @@ sparse_10_30_3_1_I.full-borne_inf
 190 74 0
 invalid
 111
-0.003074169158935547
+0.021172523498535156
 borne inferieure
 test!&0
