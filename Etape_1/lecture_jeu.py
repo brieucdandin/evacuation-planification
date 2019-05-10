@@ -20,6 +20,12 @@ def read_data(filename):
             vl = []
             for j in range(4,4+k):
                 vl.append(int(ll[j]))
+            ''' Informations sur un noeud à évacuer donné :
+                    population
+                    vitesse maximale d'évacuation
+                    nombe de noeuds par lesquels il faut passer pour l'évacuer
+                    noeuds par lesquels il faut passer pour l'évacuer
+            '''
             evac_info[id] = {'pop': pop, 'max_rate': max_rate, 'k': k, 'route': vl}
         # print(evac_info)
     line = f.readline()
@@ -36,6 +42,11 @@ def read_data(filename):
             duedate = int(ll[2])
             length = int(ll[3])
             capacity = int(ll[4])
+            ''' Informations sur un arc donné :
+                    date limite
+                    longueur (qui entraîne le temps de parcours trivialement)
+                    capacité
+            '''
             if (n1<n2):
                 graph[(n1,n2)] = {'due_date': duedate, 'length': length, 'capacity': capacity}
             else:
