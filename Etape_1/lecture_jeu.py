@@ -21,7 +21,7 @@ def read_data(filename):
             for j in range(4,4+k):
                 vl.append(int(ll[j]))
             evac_info[id] = {'pop': pop, 'max_rate': max_rate, 'k': k, 'route': vl}
-        print(evac_info)
+        # print(evac_info)
     line = f.readline()
     if (line.startswith("c [graph]")):
         line = f.readline()
@@ -36,13 +36,16 @@ def read_data(filename):
             duedate = int(ll[2])
             length = int(ll[3])
             capacity = int(ll[4])
-            graph[(n1,n2)] = {'due_date': duedate, 'length': length, 'capacity': capacity}
-        print(graph)
+            if (n1<n2):
+                graph[(n1,n2)] = {'due_date': duedate, 'length': length, 'capacity': capacity}
+            else:
+                graph[(n2,n1)] = {'due_date': duedate, 'length': length, 'capacity': capacity}
+        # print(graph)
     return (evac_info,graph)
 
 def read_solution(filename):
     f = open(filename,"r")
-    sol_info = {}
+    sol_info = {} #{'solution_name': .., 'method': .., 'nb_evac_nodes': 3, 'objective': 37, 'comment': .., 'processing_time': 1000, 'nature': 'valid', 'param': {1: (8, 3), 2: (5, 0), 3: (3, 0)}}
     line = f.readline()
     sol_info['solution_name'] = line.rstrip('\n')
     line = f.readline()
@@ -67,11 +70,10 @@ def read_solution(filename):
     return sol_info
 
 def main():
-    # pathfile = "../Instances/"
+    # pathfile = "../InstancesInt/"
     dataname = sys.argv[1]
     solname = sys.argv[2]
     pathfile = "../"
-    # name = "graphe-TD-sans-DL-data.txt"
     print("in main, run read_data")
     (my_evac,my_graph) = read_data(pathfile + dataname)
     print("my graph ", my_graph)
