@@ -12,6 +12,6 @@ dense_10_30_3_2_I.full-borne_sup
 431 11 0
 valid
 440
-0.022949934005737305
+0.012774467468261719
 borne superieure
 test!

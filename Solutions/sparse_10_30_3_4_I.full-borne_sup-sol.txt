@@ -12,6 +12,6 @@ sparse_10_30_3_4_I.full-borne_sup
 127 7 0
 valid
 738
-0.051629066467285156
+0.06301236152648926
 borne superieure
 test!
