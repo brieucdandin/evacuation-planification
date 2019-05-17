@@ -37,7 +37,7 @@ def borne_sup(evac_nodes,arcs,name):
 
 if __name__== "__main__":
     dataname = sys.argv[1]
-    # pathfile = "../"
-    pathfile = "../InstancesInt/"
+    pathfile = "../"
+    # pathfile = "../InstancesInt/"
     (my_evac,my_graph) = lec.read_data(pathfile + dataname)
     print("borne sup:", borne_sup(my_evac,my_graph,dataname + "-borne_sup"))
