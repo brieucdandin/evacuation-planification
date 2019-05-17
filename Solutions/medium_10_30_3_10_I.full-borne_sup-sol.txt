@@ -12,6 +12,6 @@ medium_10_30_3_10_I.full-borne_sup
 337 7 0
 valid
 645
-0.04220128059387207
+0.023003339767456055
 borne superieure
 test!

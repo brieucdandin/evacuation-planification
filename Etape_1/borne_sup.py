@@ -18,7 +18,8 @@ def borne_sup(evac_nodes,arcs,name):
                 used_arcs[x_arc] = [x]
     params_sol = {} # creation des parametres solution avec taux d'evacuation maximal (ie le min entre le max rate du noeud et la capacité min des arcs empruntés) et date de depart 0
     # params_sol[x] = (min_evac_rate,0) avec min_evac_rate le taux minimal sur tous les arcs partagés
-    for x in evac_nodes:
+    for x, x_value in evac_nodes.items():
+        # print(x,":",x_value['route'])
         # print([arcs[arc]['capacity']//len(used_arcs[arc]) for arc in x_value['route']])
         rate = min([arcs[arc]['capacity']//len(used_arcs[arc]) for arc in x_value['route']])
         params_sol[x] = (min(rate,evac_nodes[x]['max_rate']),0)
@@ -29,6 +30,7 @@ def borne_sup(evac_nodes,arcs,name):
         nature_of_solution = "valid"
     else:
         nature_of_solution = "invalid"
+        print("invalid")
     end_time = time.time()
     fs.write_solution(name, params_sol, nature_of_solution, sup, end_time-start_time, "borne superieure","test!")
     return sup
