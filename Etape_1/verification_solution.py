@@ -2,19 +2,16 @@ import sys
 import lecture_jeu as lec
 
 def create_blocs(evac_nodes,arcs,sol_info):
+    # dict de tuples (date de départ,taux d'évacuation) pour tous les arcs traversés
+    # solution[(id_node,(node1,node2))] = (start_date,evac_rate)
+    # 1 bloc = 1 arc traversé par 1 noeud à évacuer et 1 date de depart avec 1 taux d'évacuation,
     solution = {}
     for x, x_value in evac_nodes.items():
-        prev = x
         (evac_rate,start_date) = sol_info[x] #durée traversée = -(-x_value['pop']//evac_rate)
-        for ni in x_value['route']:
-            if (prev<ni):
-                solution[(x,(prev,ni))] = (start_date,evac_rate)
-                start_date = start_date + arcs[(prev,ni)]['length']
-            else:
-                solution[(x,(ni,prev))] = (start_date,evac_rate)
-                start_date = start_date + arcs[(ni,prev)]['length']
-            prev = ni
-        solution[(x,(prev,'completed'))] = (start_date,evac_rate)
+        for x_arc in x_value['route']:
+            solution[(x,x_arc)] = (start_date,evac_rate)
+            start_date = start_date + arcs[x_arc]['length']
+        solution[(x,(x_value['route'][-1][1],'completed'))] = (start_date,evac_rate)
     return solution
 
 def calculate_objective(evac_nodes,blocs):
@@ -30,11 +27,9 @@ def verify_max_rates(evac_nodes,arcs,sol_info):
         if (evac_rate <= evac_nodes[x]['max_rate']):
             ok = True
             # on verifie que le taux d'evacuation est inferieur aux capacites des arcs traverses
-            prev = x
-            for ni in x_value['route']:
-                if ((prev<ni) and (evac_rate > arcs[(prev,ni)]['capacity'])) or ((ni<=prev) and (evac_rate > arcs[(ni,prev)]['capacity'])):
+            for x_arc in x_value['route']:
+                if evac_rate > arcs[x_arc]['capacity']:
                     ok = False
-                prev = ni
         else:
             ok = False
         return ok

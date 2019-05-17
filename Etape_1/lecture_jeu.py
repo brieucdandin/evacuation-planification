@@ -1,7 +1,7 @@
 import sys
 
 def read_data(filename):
-    evac_info = {} #evac_info={evac_node_id : {'pop':.., 'max_rate':.., 'k':.., 'route':[node1,node2,..]} }
+    evac_info = {} #evac_info={evac_node_id : {'pop':.., 'max_rate':.., 'k':.., 'route':[(id,node1),(node1,node2),..]} }
     graph = {} #graph = {(node1,node2):{'duedate':.., 'length':.., 'capacity':..}}
     f = open(filename,"r")
     line = f.readline()
@@ -18,8 +18,14 @@ def read_data(filename):
             max_rate = int(ll[2])
             k = int(ll[3])
             vl = []
+            prev = id
             for j in range(4,4+k):
-                vl.append(int(ll[j]))
+                ni = int(ll[j])
+                if prev < ni :
+                    vl.append((prev,ni))
+                else:
+                    vl.append((ni,prev))
+                prev = ni
             ''' Informations sur un noeud à évacuer donné :
                     population
                     vitesse maximale d'évacuation
@@ -88,8 +94,9 @@ def main():
     print("in main, run read_data")
     (my_evac,my_graph) = read_data(pathfile + dataname)
     print("my graph ", my_graph)
+    print("my evac info ", my_evac)
     my_sol = read_solution(pathfile + solname)
-    print(my_sol)
+    print("my sol ",my_sol)
 
 if __name__== "__main__":
   main()
