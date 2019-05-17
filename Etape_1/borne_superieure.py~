@@ -34,7 +34,7 @@ def borne_superieure(evac_info, graph):
             # Évacuation du dernier groupe, non vide mais de taille strictement inférieure à la taille max d'un groupe d'évacuation
             if pop_to_evac % evac_rate != 0:
                 duree += 1;
-    print("Résulat erroné : il doit être égal à la somme des évacs pour chaque noeud (cf. return de borne_inf.py)")
+    print("Résulat erroné")
     return duree
 
 
