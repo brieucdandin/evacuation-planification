@@ -38,7 +38,10 @@ def verify_max_rates(evac_nodes,arcs,sol_info):
 
 def verify_capacities(evac_nodes,arcs,blocs):
     used_arcs = set([tup[1] for tup in blocs if tup[1][1] != 'completed'])
+    # used_arcs = set([arc for x in evac_nodes for arc in evac_nodes[x]['route']])
     # print("used arcs: ", used_arcs)
+    # pour chaque arc emprunté, on compte le nombre de personnes sur l'arc pour chaque unité de temps
+    # si ce nombre est supérieur à la capacité de l'arc à un instant, la solution est invalide
     valid = True
     for a in used_arcs:
         capacity = arcs[a]['capacity']
@@ -59,6 +62,37 @@ def verify_capacities(evac_nodes,arcs,blocs):
                 # print(a, "problem capacity =", capacity)
                 valid = False
     return valid
+
+# Vérifie que les contraintes sur les capacités sont respectées
+# retourne un set des arcs où la capacité est dépassée
+def verify_capacities_with_return(evac_nodes,arcs,blocs):
+    used_arcs = set([tup[1] for tup in blocs if tup[1][1] != 'completed'])
+    # used_arcs = set([arc for x in evac_nodes for arc in evac_nodes[x]['route']])
+    # print("used arcs: ", used_arcs)
+    # pour chaque arc emprunté, on compte le nombre de personnes sur l'arc pour chaque unité de temps
+    # si ce nombre est supérieur à la capacité de l'arc à un instant, la solution est invalide
+    valid = True
+    conflicts = set()
+    for a in used_arcs:
+        capacity = arcs[a]['capacity']
+        # seq = liste de (start_date,evac_rate,durée_traversée) de chaque bloc se déroulant sur l'arc a
+        seq = [(blocs[tup][0],blocs[tup][1],-(-evac_nodes[tup[0]]['pop']//blocs[tup][1])) for tup in blocs if tup[1] == a]
+        start = min(seq)[0] # début du passage sur l'arc a
+        end = max([s+d for (s,r,d) in seq]) # fin du passage sur l'arc a
+        # print("seq: ", seq)
+        for t in range(start,end):
+            nb_pers = 0
+            # pour chaque bloc de l'arc a, on compte le nombre de personnes qui traversent
+            for (st,rate,ft) in seq:
+                if (t>=st and t<(st+ft)):
+                    nb_pers = nb_pers + rate
+            # print(a," time:",t," nb_pers:",nb_pers)
+            # si le nombre de personne est supérieur à la capacité de l'arc, la solution n'est pas réalisable
+            if (nb_pers>capacity):
+                # print(a, "problem capacity =", capacity)
+                valid = False
+                conflicts.add(a)
+    return (valid,conflicts)
 
 if __name__== "__main__":
     dataname = sys.argv[1]

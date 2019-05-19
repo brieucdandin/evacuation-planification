@@ -79,7 +79,7 @@ def read_solution(filename):
     line = f.readline()
     sol_info['objective'] = int(line)
     line = f.readline()
-    sol_info['processing_time'] = int(line)
+    sol_info['processing_time'] = float(line)
     line = f.readline()
     sol_info['method'] = line.rstrip('\n')
     line = f.readline()
