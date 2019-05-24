@@ -5,6 +5,6 @@ exemple_2-5.txt-borne_inf
 3 3 0
 invalid
 34
-6.222724914550781e-05
+0.00015616416931152344
 borne inferieure
 test!

@@ -7,6 +7,7 @@ import lecture_jeu as lec
 def borne_superieure(evac_info, graph):
     borne = {}
     duree = 0
+    DEBUG_duree = 0
     # Pour chaque noeud de départ noeud_init :
     for noeud_init_key, noeud_init in evac_info.items():
         pop_to_evac = noeud_init['pop']
@@ -33,7 +34,9 @@ def borne_superieure(evac_info, graph):
             duree += pop_to_evac // evac_rate
             # Évacuation du dernier groupe, non vide mais de taille strictement inférieure à la taille max d'un groupe d'évacuation
             if pop_to_evac % evac_rate != 0:
-                duree += 1;
+                duree += 1
+        print(duree - DEBUG_duree)
+        DEBUG_duree = duree
     print("Résulat erroné : il doit être égal à la somme des évacs pour chaque noeud (cf. return de borne_inf.py)")
     return duree
 
