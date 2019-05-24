@@ -71,11 +71,45 @@ def voisin_taux(evac_nodes,arcs,blocs,step):
                 return (True,new_blocs)
             # sinon arrêt
             else:
-                print("augmentation taux avec ajustements OK")
+                print("augmentation taux avec ajustements PAS OK")
                 return (False,{})
-    # sinon pas de voisin
+    # sinon pas de voisin --> essayer avec le second plus tard et avancer les dates de départ
     else:
         return (False,{})
+
+# Fonction qui permet de choisir le premier meilleur voisin
+def choix_first_voisin_taux(evac_nodes,arcs,blocs,eval_prev):
+    # calcul du temps d'évacuation de chaque noeud
+    temps_evac = [(x,(blocs[(x,(evac_nodes[x]['route'][-1][1],'completed'))][0] - (-evac_nodes[x]['pop']//blocs[(x,(evac_nodes[x]['route'][-1][1],'completed'))][1]))) for x in evac_nodes]
+    # récupère le noeud qui met le temps le plus long
+    noeud_limit = max(temps_evac,key=itemgetter(1))
+    # on récupère le taux maximal possible pour le noeud et le taux de la solution prise
+    max_rate_noeud_limit = min(evac_nodes[noeud_limit[0]]['max_rate'],min([arcs[arc]['capacity'] for arc in evac_nodes[noeud_limit[0]]['route']]))
+    current_rate = blocs[(noeud_limit[0],evac_nodes[noeud_limit[0]]['route'][0])][1]
+    # on essaie d'augmenter le noeud le plus lent à son taux d'évacuation maximal
+    step = max_rate_noeud_limit - current_rate
+    # on boucle tant qu'on a pas atteint le taux maximal et qu'on a pas trouvé de meilleur voisin
+    keep_search = step > 0
+    best_voisin = {}
+    while keep_search:
+        # génération d'un voisin
+        (possible,voisin) = voisin_taux(evac_nodes,arcs,blocs,step)
+        # si la solution est réalisable on l'évalue
+        if possible:
+            eval_voisin =  vs.calculate_objective(evac_nodes,voisin)
+            # si l'évaluation de ce nouveau voisin est meilleure que celle en paramètre (eval_prev) on la retourne
+            if eval_voisin > eval_prev:
+                keep_search = False
+                best_voisin = voisin
+            # sinon on réduit la valeur de l'augmentation
+            else:
+                step = step - 1
+                keep_search = step > 0
+        # si la solution n'est pas réalisable on réduit la valeur d'augmentation
+        else:
+            step = step - 1
+            keep_search = step > 0
+    return best_voisin
 
 def recherche_locale(evac_nodes,arcs,sol_init):
     # solution initiale
