@@ -21,7 +21,7 @@ def borne_inf(evac_nodes,arcs,name):
 
 if __name__== "__main__":
     dataname = sys.argv[1]
-    pathfile = "../"
-    # pathfile = "../InstancesInt/"
+    # pathfile = "../"
+    pathfile = "../InstancesInt/"
     (my_evac,my_graph) = lec.read_data(pathfile + dataname)
-    print("borne inf:", borne_inf(my_evac,my_graph,dataname + "-borne_inf"))
+    print("borne inf:", borne_inf(my_evac,my_graph,dataname + "-sol_inf"))

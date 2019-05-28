@@ -4,7 +4,7 @@ def write_solution(name_of_instance, nodes_to_evacuate, nature_of_solution, valu
     nmb_of_nodes_to_evacuate = 0
     for k in nodes_to_evacuate:
         nmb_of_nodes_to_evacuate += 1
-    f = open("../Solutions/" + name_of_instance + "-sol.txt", "w")
+    f = open("../Solutions/SupDates/" + name_of_instance, "w")
 
     f.write(name_of_instance + "\n")
     f.write(str(nmb_of_nodes_to_evacuate) + "\n")

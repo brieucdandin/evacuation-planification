@@ -87,10 +87,10 @@ def read_solution(filename):
     return sol_info
 
 def main():
-    # pathfile = "../InstancesInt/"
+    pathfile = "../InstancesInt/"
     dataname = sys.argv[1]
     solname = sys.argv[2]
-    pathfile = "../"
+    # pathfile = "../"
     print("in main, run read_data")
     (my_evac,my_graph) = read_data(pathfile + dataname)
     print("my graph ", my_graph)
