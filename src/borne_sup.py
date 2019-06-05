@@ -60,7 +60,7 @@ def borne_sup_date_taux(evac_nodes,arcs,name):
         nature_of_solution = "invalid"
         print("invalid")
     end_time = time.time()
-    fs.write_solution(name, params_sol, nature_of_solution, sup, end_time-start_time, "borne superieure dates","test!")
+    fs.write_solution(name, params_sol, nature_of_solution, sup, end_time-start_time, "borne superieure dates","test!","../Solutions/SupDatesTaux/")
     return sup
 
 def borne_sup_dates(evac_nodes,arcs,name):
@@ -87,6 +87,8 @@ if __name__== "__main__":
     dataname = sys.argv[1]
     # pathfile = "../"
     pathfile = "../InstancesInt/"
-    (my_evac,my_graph) = lec.read_data(pathfile + dataname + ".full")
+    # (my_evac,my_graph) = lec.read_data(pathfile + dataname + ".full")
+    (my_evac,my_graph) = lec.read_data(pathfile + dataname)
     # print("borne sup:", borne_sup(my_evac,my_graph,dataname + "-sol_sup"))
-    print("borne sup:", borne_sup_dates(my_evac,my_graph,dataname + "-sol_sup"))
+    # print("borne sup:", borne_sup_dates(my_evac,my_graph,dataname + "-sol_sup"))
+    print("borne sup:", borne_sup_date_taux(my_evac,my_graph,dataname + "-sol_sup"))
