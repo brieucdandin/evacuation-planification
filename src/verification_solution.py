@@ -18,7 +18,7 @@ def calculate_objective(evac_nodes,blocs):
     # pour avoir du O(n)
     obj_x = [(blocs[(x,(evac_nodes[x]['route'][-1][1],'completed'))][0] - (-evac_nodes[x]['pop']//blocs[(x,(evac_nodes[x]['route'][-1][1],'completed'))][1])) for x in evac_nodes]
     # obj_x = [(blocs[tup][0] - (-evac_nodes[tup[0]]['pop']//blocs[tup][1])) for tup in blocs if tup[1][1] == 'completed']
-    print("objectives: ", obj_x)
+    # print("objectives: ", obj_x)
     return max(obj_x)
 
 def verify_max_rates(evac_nodes,arcs,sol_info):

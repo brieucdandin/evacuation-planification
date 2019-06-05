@@ -1,10 +1,11 @@
 import sys
 
-def write_solution(name_of_instance, nodes_to_evacuate, nature_of_solution, value_of_aim_function, processing_time, method, free_space = ""):
+
+def write_solution(name_of_instance, nodes_to_evacuate, nature_of_solution, value_of_aim_function, processing_time, method, free_space = "",path = "../Solutions/"):
     nmb_of_nodes_to_evacuate = 0
     for k in nodes_to_evacuate:
         nmb_of_nodes_to_evacuate += 1
-    f = open("../Solutions/SupDates/" + name_of_instance, "w")
+    f = open(path + name_of_instance, "w")
 
     f.write(name_of_instance + "\n")
     f.write(str(nmb_of_nodes_to_evacuate) + "\n")
