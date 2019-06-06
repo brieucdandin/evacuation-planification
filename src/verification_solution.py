@@ -1,6 +1,7 @@
 import sys
 import lecture_jeu as lec
 
+# Fonction pour modéliser une solution sous forme de blocs représentant les tâches d'un diagramme de Gantt
 def create_blocs(evac_nodes,arcs,sol_info):
     # dict de tuples (date de départ,taux d'évacuation) pour tous les arcs traversés
     # solution[(id_node,(node1,node2))] = (start_date,evac_rate)
@@ -14,6 +15,7 @@ def create_blocs(evac_nodes,arcs,sol_info):
         solution[(x,(x_value['route'][-1][1],'completed'))] = (start_date,evac_rate)
     return solution
 
+# Fonction pour évaluer une solution
 def calculate_objective(evac_nodes,blocs):
     # pour avoir du O(n)
     obj_x = [(blocs[(x,(evac_nodes[x]['route'][-1][1],'completed'))][0] - (-evac_nodes[x]['pop']//blocs[(x,(evac_nodes[x]['route'][-1][1],'completed'))][1])) for x in evac_nodes]
@@ -21,6 +23,7 @@ def calculate_objective(evac_nodes,blocs):
     # print("objectives: ", obj_x)
     return max(obj_x)
 
+# Fonction pour vérifier que les taux d'évacuations ne dépassent pas individuellement les capacités des arcs empruntés ni le taux maximal des noeuds
 def verify_max_rates(evac_nodes,arcs,sol_info):
     for x, x_value in evac_nodes.items():
         ok = True
@@ -36,6 +39,7 @@ def verify_max_rates(evac_nodes,arcs,sol_info):
             ok = False
         return ok
 
+# Vérification que les capacités des arcs ne sont pas dépassées pour la solution modélisée par blocs
 def verify_capacities(evac_nodes,arcs,blocs):
     used_arcs = set([tup[1] for tup in blocs if tup[1][1] != 'completed'])
     # used_arcs = set([arc for x in evac_nodes for arc in evac_nodes[x]['route']])
@@ -46,7 +50,9 @@ def verify_capacities(evac_nodes,arcs,blocs):
     for a in used_arcs:
         capacity = arcs[a]['capacity']
         # seq = liste de (start_date,evac_rate,durée_traversée) de chaque bloc se déroulant sur l'arc a
-        seq = [(blocs[tup][0],blocs[tup][1],-(-evac_nodes[tup[0]]['pop']//blocs[tup][1])) for tup in blocs if tup[1] == a]
+        # Meilleure complexité O(n) au lieu de O(n*m)
+        seq = [(blocs[(x,a)][0],blocs[(x,a)][1],-(-evac_nodes[x]['pop']//blocs[(x,a)][1])) for x in evac_nodes if a in evac_nodes[x]['route']]
+        # seq = [(blocs[tup][0],blocs[tup][1],-(-evac_nodes[tup[0]]['pop']//blocs[tup][1])) for tup in blocs if tup[1] == a]
         start = min(seq)[0] # début du passage sur l'arc a
         end = max([s+d for (s,r,d) in seq]) # fin du passage sur l'arc a
         # print("seq: ", seq)
@@ -94,6 +100,7 @@ def verify_capacities_with_return(evac_nodes,arcs,blocs):
                 conflicts.add(a)
     return (valid,conflicts)
 
+# Fonction principale pour vérifier qu'une solution chargée est réalisable
 if __name__== "__main__":
     dataname = sys.argv[1]
     solname = sys.argv[2]

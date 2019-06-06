@@ -8,6 +8,8 @@ import lecture_jeu as lec
 import verification_solution as vs
 import creation_fichier_solution as fs
 
+# On avance la date de départ du noeud se terminant le plus tard
+# si la solution n'est pas réalisable, on avance la date de départ du deuxième noeud se finissant le plus tard
 def voisin_date(evac_nodes,arcs,blocs,step):
     # calcul du temps d'évacuation de chaque noeud
     temps_evac = [(x,(blocs[(x,(evac_nodes[x]['route'][-1][1],'completed'))][0] - (-evac_nodes[x]['pop']//blocs[(x,(evac_nodes[x]['route'][-1][1],'completed'))][1]))) for x in evac_nodes]
@@ -48,6 +50,8 @@ def voisin_date(evac_nodes,arcs,blocs,step):
         # print("le plus long commence à 0")
         return (False,{})
 
+# on augmente le taux d'évacuation du noeud se terminant le plus tard
+# si la solution n'est pas réalisable, on diminue les taux d'évacuation des noeuds en conflit
 def voisin_taux(evac_nodes,arcs,blocs,step):
     # calcul du temps d'évacuation de chaque noeud
     temps_evac = [(x,(blocs[(x,(evac_nodes[x]['route'][-1][1],'completed'))][0] - (-evac_nodes[x]['pop']//blocs[(x,(evac_nodes[x]['route'][-1][1],'completed'))][1]))) for x in evac_nodes]
@@ -89,6 +93,9 @@ def voisin_taux(evac_nodes,arcs,blocs,step):
     else:
         return (False,{})
 
+# on augmente le taux d'évacuation du noeud se terminant le plus tard
+# si la solution n'est pas réalisable, on diminue les taux d'évacuation des noeuds en conflit
+# si la solution n'est toujours pas réalisable, on recule la date de départ du noeud un certain nombre de fois ou tant que la solution n'est pas réalisable
 def voisin_taux_date(evac_nodes,arcs,blocs,step,nb_temp_steps=-1):
     # calcul du temps d'évacuation de chaque noeud
     temps_evac = [(x,(blocs[(x,(evac_nodes[x]['route'][-1][1],'completed'))][0] - (-evac_nodes[x]['pop']//blocs[(x,(evac_nodes[x]['route'][-1][1],'completed'))][1]))) for x in evac_nodes]
@@ -154,6 +161,9 @@ def voisin_taux_date(evac_nodes,arcs,blocs,step,nb_temp_steps=-1):
         # print("pas de voisin généré")
         return (False,{})
 
+# on augmente le taux d'évacuation du noeud se terminant le plus tard
+# on avance sa date de départ
+# on garde la solution réalisable (augmentation du taux et avance de la date OU augmentation du taux OU avance de la date)
 def voisin_taux_puis_date(evac_nodes,arcs,blocs,step_taux,step_date):
     # calcul du temps d'évacuation de chaque noeud
     temps_evac = [(x,(blocs[(x,(evac_nodes[x]['route'][-1][1],'completed'))][0] - (-evac_nodes[x]['pop']//blocs[(x,(evac_nodes[x]['route'][-1][1],'completed'))][1]))) for x in evac_nodes]
@@ -356,8 +366,8 @@ def choix_first_voisin_taux_date(evac_nodes,arcs,blocs,eval_prev):
             keep_search = step > 0
     return best_voisin
 
+# Création d'une solution réalisable en modifiant les dates de départ de façon aléatoire
 def diversification_date(evac_nodes,arcs,blocs,step):
-    # création d'une solution réalisable en modifiant les dates de départ de façon aléatoire
     solution_trouvee = False
     new_blocs = copy.deepcopy(blocs)
     while not solution_trouvee:
@@ -435,7 +445,7 @@ def recherche_locale_avec_div(evac_nodes,arcs,sol_init,name,path_sol,nb_iteratio
     while i < nb_iterations:
         voisin_trouve = True
         while voisin_trouve:
-            voisin = choix_first_voisin_taux_puis_date(evac_nodes,arcs,one_sol,one_eval)
+            voisin = choix_first_voisin_taux_date(evac_nodes,arcs,one_sol,one_eval)
             if voisin :
                 print("voisin améliorant généré")
                 one_sol = voisin

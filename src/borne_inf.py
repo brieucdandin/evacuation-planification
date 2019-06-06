@@ -4,6 +4,7 @@ import lecture_jeu as lec
 import verification_solution as vs
 import creation_fichier_solution as fs
 
+# Création d'une solution représentant une borne inférieure et évaluation de celle-ci
 def borne_inf(evac_nodes,arcs,name):
     start_time = time.time()
     params_sol = {} # creation des parametres solution avec taux d'evacuation maximal (ie le min entre le max rate du noeud et la capacité min des arcs empruntés) et date de depart 0

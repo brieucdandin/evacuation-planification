@@ -4,12 +4,13 @@ import lecture_jeu as lec
 import verification_solution as vs
 import creation_fichier_solution as fs
 
+# Borne supérieure de la solution optimale exécutant toutes les évacuations simultanément avec le taux d'évacuation limitant
 def borne_sup(evac_nodes,arcs,name):
     start_time = time.time()
     # used_arcs: dict des arcs utilisés avec la liste des noeuds d'évacuation qui l'utilisent
     # used_arcs[(n1,n2)] = [a,b,c]
     # nodes_route: dict pour chaque noeud à évaluer, liste des arcs empruntés
-    used_arcs = {};
+    used_arcs = {}
     for x, x_value in evac_nodes.items():
         for x_arc in x_value['route']:
             if x_arc in used_arcs:
@@ -35,7 +36,7 @@ def borne_sup(evac_nodes,arcs,name):
     fs.write_solution(name, params_sol, nature_of_solution, sup, end_time-start_time, "borne superieure","test!")
     return sup
 
-# Borne sup avec dates de départs un par un et taux minimal
+# Borne supérieure faisant démarrer les évacuations une par une avec le taux d'évacuation limitant
 def borne_sup_date_taux(evac_nodes,arcs,name):
     start_time = time.time()
     used_arcs = {};
@@ -63,6 +64,7 @@ def borne_sup_date_taux(evac_nodes,arcs,name):
     fs.write_solution(name, params_sol, nature_of_solution, sup, end_time-start_time, "borne superieure dates","test!","../Solutions/SupDatesTaux/")
     return sup
 
+# Borne supérieure de la solution optimale faisant démarrer les exécutions une par une avec un taux d'évacuation maximal
 def borne_sup_dates(evac_nodes,arcs,name):
     start_time = time.time()
     start_date = 0
@@ -70,7 +72,7 @@ def borne_sup_dates(evac_nodes,arcs,name):
     for x, x_value in evac_nodes.items():
         rate = min([arcs[arc]['capacity'] for arc in x_value['route']])
         params_sol[x] = (min(rate,evac_nodes[x]['max_rate']),start_date)
-        start_date = sum([arcs[arc]['length'] for arc in x_value['route']]) + (-(-x_value['pop']//rate)) + start_date
+        start_date = sum([arcs[arc]['length'] for arc in x_value['route']]) + (-(-x_value['pop']//min(rate,evac_nodes[x]['max_rate']))) + start_date
     gantt_blocs = vs.create_blocs(evac_nodes,arcs,params_sol)
     sup = vs.calculate_objective(evac_nodes,gantt_blocs)
     if vs.verify_capacities(evac_nodes,arcs,gantt_blocs):
